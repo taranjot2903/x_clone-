@@ -1,0 +1,372 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - X Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1d9bf0;
+            --primary-hover: #1a8cd8;
+            --background: #000000;
+            --card-bg: #16181c;
+            --text-primary: #ffffff;
+            --text-secondary: #8899a6;
+            --border-color: #2f3336;
+            --hover-bg: #1e2732;
+            --danger: #f4212e;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .sidebar {
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100%;
+        }
+        
+        .sidebar h2 {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            padding-left: 12px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 4px;
+        }
+        
+        .sidebar a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+        
+        .sidebar a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .sidebar .logout {
+            color: var(--danger);
+        }
+        
+        .sidebar .logout:hover {
+            background-color: rgba(244, 33, 46, 0.1);
+        }
+        
+        .container {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .settings-panel {
+            width: 100%;
+        }
+        
+        .settings-panel h1 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+        
+        .setting-section {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .setting-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 155, 240, 0.1);
+        }
+        
+        .setting-section h2 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .setting-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .setting-option:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .setting-option label {
+            color: var(--text-primary);
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .setting-option .description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+        
+        .setting-option input[type="checkbox"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 44px;
+            height: 24px;
+            background: #38444D;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            transition: background 0.2s ease;
+        }
+        
+        .setting-option input[type="checkbox"]:checked {
+            background: var(--primary-color);
+        }
+        
+        .setting-option input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s ease;
+        }
+        
+        .setting-option input[type="checkbox"]:checked::before {
+            transform: translateX(20px);
+        }
+        
+        .setting-option input[type="text"],
+        .setting-option input[type="password"] {
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--background);
+            color: var(--text-primary);
+            flex: 0.6;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .setting-option input[type="text"]:focus,
+        .setting-option input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(29, 155, 240, 0.2);
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+        
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .container {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+            
+            .setting-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .setting-option input[type="text"],
+            .setting-option input[type="password"] {
+                width: 100%;
+                margin-top: 0.5rem;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>X</h2>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'explore' %}">Explore</a></li>
+            <li><a href="{% url 'messages' %}">Messages</a></li>
+            <li><a href="{% url 'settings' %}" class="active">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Settings Panel -->
+    <div class="container">
+        <div class="settings-panel">
+            <h1>Settings</h1>
+
+            <form method="POST" action="{% url 'settings' %}">
+                {% csrf_token %}
+
+                <!-- Account Section -->
+                <div class="setting-section">
+                    <h2>Account</h2>
+                    <div class="setting-option">
+                        <div>
+                            <label>Username</label>
+                            <div class="description">Change your display name</div>
+                        </div>
+                        <input type="text" name="username" value="{{ user.username }}" placeholder="New username">
+                    </div>
+                    <div class="setting-option">
+                        <div>
+                            <label>Password</label>
+                            <div class="description">Change your password</div>
+                        </div>
+                        <input type="password" name="password" placeholder="New password">
+                    </div>
+                </div>
+
+                <!-- Privacy Section -->
+                <div class="setting-section">
+                    <h2>Privacy</h2>
+                    <div class="setting-option">
+                        <div>
+                            <label>Private Account</label>
+                            <div class="description">Make your account private</div>
+                        </div>
+                        <input type="checkbox" name="private_account" {% if settings.private_account %}checked{% endif %}>
+                    </div>
+                    <div class="setting-option">
+                        <div>
+                            <label>Allow Tagging</label>
+                            <div class="description">Allow others to tag you</div>
+                        </div>
+                        <input type="checkbox" name="allow_tagging" {% if settings.allow_tagging %}checked{% endif %}>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="setting-section">
+                    <h2>Notifications</h2>
+                    <div class="setting-option">
+                        <div>
+                            <label>Email Notifications</label>
+                            <div class="description">Receive email notifications</div>
+                        </div>
+                        <input type="checkbox" name="email_notifications" {% if settings.email_notifications %}checked{% endif %}>
+                    </div>
+                    <div class="setting-option">
+                        <div>
+                            <label>Push Notifications</label>
+                            <div class="description">Receive push notifications</div>
+                        </div>
+                        <input type="checkbox" name="push_notifications" {% if settings.push_notifications %}checked{% endif %}>
+                    </div>
+                </div>
+
+                <!-- Appearance Section -->
+                <div class="setting-section">
+                    <h2>Appearance</h2>
+                    <div class="setting-option">
+                        <div>
+                            <label>Dark Mode</label>
+                            <div class="description">Toggle dark theme</div>
+                        </div>
+                        <input type="checkbox" name="dark_mode" {% if settings.dark_mode %}checked{% endif %}>
+                    </div>
+                    <div class="setting-option">
+                        <div>
+                            <label>Font Size</label>
+                            <div class="description">Adjust text size</div>
+                        </div>
+                        <input type="text" name="font_size" value="{{ settings.font_size }}" placeholder="Medium">
+                    </div>
+                </div>
+
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

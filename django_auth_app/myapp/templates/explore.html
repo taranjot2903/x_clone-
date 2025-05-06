@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Explore - X Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1d9bf0;
+            --primary-hover: #1a8cd8;
+            --background: #000000;
+            --card-bg: #16181c;
+            --text-primary: #ffffff;
+            --text-secondary: #8899a6;
+            --border-color: #2f3336;
+            --hover-bg: #1e2732;
+            --danger: #f4212e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 350px;
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar {
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100%;
+        }
+
+        .sidebar h2 {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            padding-left: 12px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .sidebar a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .sidebar .logout {
+            color: var(--danger);
+        }
+
+        .sidebar .logout:hover {
+            background-color: rgba(244, 33, 46, 0.1);
+        }
+
+        .container {
+            padding: 2rem;
+            overflow-y: auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .widgets {
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 12px 32px;
+            border-radius: 9999px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: transparent;
+            color: var(--text-secondary);
+        }
+
+        .tab:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .tweet-box {
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+
+        .tweet-box textarea {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: none;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .tweet-box button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .tweet-box button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .tweet {
+            background: var(--card-bg);
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .tweet strong {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .tweet p {
+            color: var(--text-primary);
+            margin-top: 0.5rem;
+        }
+
+        .message {
+            background-color: var(--primary-color);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: white;
+        }
+
+        .widgets input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            background-color: #202327;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .widgets h3 {
+            margin-bottom: 1rem;
+        }
+
+        .widgets ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .widgets li {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 250px 1fr;
+            }
+
+            .widgets {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                position: relative;
+                height: auto;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .tweet-box button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>X</h2>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'explore' %}" class="active">Explore</a></li>
+            <li><a href="{% url 'messages' %}">Messages</a></li>
+            <li><a href="{% url 'settings' %}">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Feed -->
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" id="foryouTab" onclick="showTab('foryou')">For You</div>
+            <div class="tab" id="followingTab" onclick="showTab('following')">Following</div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="tweet-box">
+            <form method="POST" action="{% url 'post_tweet' %}">
+                {% csrf_token %}
+                <textarea name="tweet" rows="3" placeholder="What's happening?"></textarea>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+
+        <div id="tweetsFeed">
+            {% for tweet in tweets %}
+                <div class="tweet">
+                    <strong>{{ tweet.user.username }}</strong>
+                    <p>{{ tweet.content }}</p>
+                </div>
+            {% endfor %}
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">At dawn from the gateway to Mars, the launch of Starship's second flight test <a href="https://t.co/ffKnsVKwG4">pic.twitter.com/ffKnsVKwG4</a></p>— SpaceX (@SpaceX) <a href="https://twitter.com/SpaceX/status/1732824684683784516?ref_src=twsrc%5Etfw">December 7, 2023</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Never forget <a href="https://twitter.com/DefiantLs?ref_src=twsrc%5Etfw">@DefiantLs</a> <a href="https://t.co/ZEH9U1Oz10">pic.twitter.com/ZEH9U1Oz10</a></p>— Rothmus 🏴 (@Rothmus) <a href="https://twitter.com/Rothmus/status/1891284262411723201?ref_src=twsrc%5Etfw">February 17, 2025</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Alright twitter artists now finish the body <a href="https://t.co/IEx2F9zfQz">pic.twitter.com/IEx2F9zfQz</a></p>— 💫K-art💫 (@Kartkaprokai) <a href="https://twitter.com/Kartkaprokai/status/1891097447524348323?ref_src=twsrc%5Etfw">February 16, 2025</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Calling all developers! 📣<br><br>Innovate with our real-time and historical data on the X API.<br><br>Get started with Pro👇</p>— Developers (@XDevelopers) <a href="https://twitter.com/XDevelopers/status/1861111969639481848?ref_src=twsrc%5Etfw">November 25, 2024</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Young men in New Zealand are all done with the rainbow parades.<a href="https://t.co/q3NG2uhUqV">pic.twitter.com/q3NG2uhUqV</a></p>— Billboard Chris 🇨🇦🇺🇸 (@BillboardChris) <a href="https://twitter.com/BillboardChris/status/1890737952696811618?ref_src=twsrc%5Etfw">February 15, 2025</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Damnnnnnnn 🤯 This is really crisp anime.<br><br>The best anime workflow right now is Midjourney Niji to Luma Ray 2. <br><br>Check it out and try for yourself!<a href="https://t.co/LHUnrds9kH">pic.twitter.com/LHUnrds9kH</a></p>— PJ Ace (@PJaccetturo) <a href="https://twitter.com/PJaccetturo/status/1891237847954325833?ref_src=twsrc%5Etfw">February 16, 2025</a></blockquote>
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Breaking: MSNBC Rachel Maddow Caught In A Desperate Attempt To Defame Elon Musk And Tesla<br><br>For Our Latest Reports Watch On X Live:<a href="https://t.co/S9cbFL1vkX">https://t.co/S9cbFL1vkX</a> <a href="https://t.co/TFdoUgW6f3">pic.twitter.com/TFdoUgW6f3</a></p>— Alex Jones (@RealAlexJones) <a href="https://twitter.com/RealAlexJones/status/1890959761530552363?ref_src=twsrc%5Etfw">February 16, 2025</a></blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        </div>
+    </div>
+
+    <!-- Widgets -->
+<div class="widgets">
+    <input type="text" placeholder="Search" />
+    <h3>Trending</h3>
+    <ul>
+        <li>#Django</li>
+        <li>#Python</li>
+        <li>#100DaysOfCode</li>
+    </ul>
+</div>
+
+
+<script>
+    function showTab(tabName) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        const activeTab = tabName === 'foryou' ? document.getElementById('foryouTab') : document.getElementById('followingTab');
+        activeTab.classList.add('active');
+    }
+
+    showTab('foryou');
+</script>
+</body>
+</html>
